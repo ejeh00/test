@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabulous Fashion Runway: Speak to Shine!</title>
+    <!-- Google Fonts for Child-Friendly Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-pink: #ffe6f2;
+            --primary-pink: #ff66b2;
+            --dark-pink: #d93680;
+            --purple-accent: #9b59b6;
+            --light-purple: #f3e5f5;
+            --gold: #f1c40f;
+            --white: #ffffff;
+            --text-dark: #4a2d40;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ff9aef 0%, #fad0c4 50%, #fbc5ed 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 12px 35px rgba(217, 54, 128, 0.25);
+            border: 5px solid var(--primary-pink);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .game-header {
+            background: linear-gradient(90deg, var(--primary-pink), var(--purple-accent));
+            color: var(--white);
+            padding: 15px;
+            text-align: center;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .game-header h1 {
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 6px;
+            font-size: 1rem;
+        }
+
+        /* SCREENS */
+        .screen {
+            display: none;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* WELCOME & CERTIFICATE CARDS */
+        .welcome-card, .certificate-card {
+            padding: 20px;
+            width: 100%;
+        }
+
+        .welcome-card h2, .certificate-card h2 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--dark-pink);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .welcome-card p, .certificate-card p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .model-preview {
+            font-size: 3.5rem;
+            margin: 15px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* BUTTONS */
+        .primary-btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: var(--white);
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.3rem;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.6);
+        }
+
+        .primary-btn:active {
+            transform: translateY(1px);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: var(--purple-accent);
+            border: 2px dashed var(--purple-accent);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .secondary-btn:hover {
+            background: var(--light-purple);
+        }
+
+        /* RUNWAY STAGE */
+        .stage {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(to bottom, #2c1654, #4a2375);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 4px solid var(--purple-accent);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .runway {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background: #333;
+            border-top: 4px solid var(--gold);
+            display: flex;
+            justify-content: center;
+        }
+
+        .runway-stripes {
+            width: 30px;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                var(--gold),
+                var(--gold) 15px,
+                #222 15px,
+                #222 30px
+            );
+            opacity: 0.8;
+        }
+
+        /* MODEL ANIMATIONS */
+        .model-container {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: left 0.8s ease-in-out;
+        }
+
+        .model-avatar {
+            font-size: 3rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+
+        .model-outfit-badge {
+            background: var(--white);
+            color: var(--dark-pink);
+            font-size: 0.75rem;
+            font-family: 'Fredoka One', cursive;
+            padding: 2px 8px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            margin-top: -5px;
+            white-space: nowrap;
+        }
+
+        /* Model States */
+        .model-container.walk {
+            animation: modelWalk 0.6s infinite alternate ease-in-out;
+        }
+
+        @keyframes modelWalk {
+            0% { transform: translateX(-50%) translateY(0) rotate(-3deg); }
+            100% { transform: translateX(-50%) translateY(-6px) rotate(3deg); }
+        }
+
+        .model-container.pose {
+            animation: modelPose 0.8s ease-in-out;
+        }
+
+        @keyframes modelPose {
+            0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
+            50% { transform: translateX(-50%) scale(1.2) rotate(10deg); }
+        }
+
+        .model-container.stumble {
+            animation: modelStumble 0.7s ease-in-out;
+        }
+
+        @keyframes modelStumble {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            30% { transform: translateX(-50%) translateY(10px) rotate(-25deg); }
+            60% { transform: translateX(-50%) translateY(-5px) rotate(20deg); }
+            100% { transform: translateX(-50%) rotate(0deg); }
+        }
+
+        /* FEEDBACK BANNER */
+        .feedback-banner {
+            position: absolute;
+            top: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: #744210;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+        }
+
+        .feedback-banner.hidden {
+            display: none;
+        }
+
+        .feedback-banner.error {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        @keyframes popIn {
+            0% { transform: translateX(-50%) scale(0); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        /* CONTROL PANEL */
+        .control-panel {
+            background: var(--light-purple);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #e1bee7;
+        }
+
+        .level-indicator {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--purple-accent);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .sentence-display {
+            background: var(--white);
+            border: 3px solid var(--primary-pink);
+            border-radius: 16px;
+            padding: 14px 20px;
+            font-size: 1.35rem;
+            font-family: 'Fredoka One', cursive;
+            color: var(--dark-pink);
+            width: 100%;
+            margin-bottom: 10px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .instruction-hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .mic-btn {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: var(--white);
+            border: none;
+            width: 100%;
+            max-width: 260px;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 176, 155, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .mic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0, 176, 155, 0.6);
+        }
+
+        .mic-btn.listening {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            animation: pulseMic 1.2s infinite;
+        }
+
+        @keyframes pulseMic {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 65, 108, 0.6); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 15px rgba(255, 65, 108, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 65, 108, 0); }
+        }
+
+        .speech-status {
+            font-size: 0.85rem;
+            color: var(--purple-accent);
+            margin-top: 10px;
+            min-height: 20px;
+            font-style: italic;
+        }
+
+        .manual-fallback {
+            margin-top: 5px;
+        }
+
+        /* CERTIFICATE BADGE */
+        .certificate-badge {
+            background: linear-gradient(135deg, #fff9c4, #fff176);
+            border: 4px dashed #fbc02d;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            color: #5d4037;
+        }
+
+        .certificate-badge h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #f57f17;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .cert-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            color: var(--dark-pink);
+            margin: 8px 0;
+            letter-spacing: 2px;
+        }
+
+        /* CONFETTI & STARS */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--gold);
+            position: absolute;
+            top: -10px;
+            z-index: 1000;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 480px) {
+            .game-container {
+                border-width: 3px;
+                border-radius: 16px;
+            }
+            .game-header h1 {
+                font-size: 1.3rem;
+            }
+            .sentence-display {
+                font-size: 1.15rem;
+                padding: 10px;
+            }
+            .stage {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- HEADER / STATS -->
+        <header class="game-header">
+            <h1>✨ FABULOUS FASHION RUNWAY ✨</h1>
+            <p class="subtitle">Speak to Shine & Help Your Model Walk!</p>
+            <div class="stats-bar">
+                <div class="stat-item">Level: <span id="current-level-badge">1</span></div>
+                <div class="stat-item">⭐ Stars: <span id="star-count">0</span> / <span id="total-sentences-count">15</span></div>
+            </div>
+        </header>
+
+        <!-- START SCREEN -->
+        <div id="start-screen" class="screen active">
+            <div class="welcome-card">
+                <h2>Welcome, Little Fashion Star! 🌟</h2>
+                <p>Read the sentences out loud to help your model walk the glamorous runway and strike a pose!</p>
+                <div class="model-preview">👗 👠 ✨</div>
+                <button id="start-btn" class="primary-btn">START GAME! 🚀</button>
+            </div>
+        </div>
+
+        <!-- GAMEPLAY SCREEN -->
+        <div id="game-screen" class="screen">
+            <!-- RUNWAY STAGE -->
+            <div class="stage">
+                <div class="spotlights"></div>
+                <div class="runway">
+                    <div class="runway-stripes"></div>
+                    <!-- MODEL CARTOON CONTAINER -->
+                    <div id="model-container" class="model-container idle">
+                        <div class="model-avatar" id="model-avatar">👧🏽</div>
+                        <div class="model-outfit-badge" id="outfit-badge">👗 Pink Dress</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEEDBACK BANNER -->
+            <div id="feedback-banner" class="feedback-banner hidden">
+                <span id="feedback-text">GREAT JOB! YOU DID IT!</span>
+            </div>
+
+            <!-- PROMPT & SPEECH CONTROLS -->
+            <div class="control-panel">
+                <div class="level-indicator">Level <span id="level-num">1</span> - Sentence <span id="sentence-index">1</span> of 5</div>
+                <div class="sentence-display" id="sentence-box">
+                    "My pink dress is pretty."
+                </div>
+                <div class="instruction-hint">🗣️ Read the sentence out loud, then tap the microphone:</div>
+                
+                <div class="action-buttons">
+                    <button id="mic-btn" class="mic-btn">
+                        <span class="mic-icon">🎤</span> Tap & Speak
+                    </button>
+                </div>
+
+                <div id="speech-status" class="speech-status">Listening... Speak clearly!</div>
+                
+                <!-- Fallback Manual Controls for Devices without Speech Recognition -->
+                <div class="manual-fallback">
+                    <button id="manual-pass-btn" class="secondary-btn" title="Click if mic isn't working">✨ Skip / Read Correctly</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WINNING CELEBRATION / CERTIFICATE SCREEN -->
+        <div id="celebration-screen" class="screen">
+            <div class="certificate-card">
+                <h2>🎉 CONGRATULATIONS, FASHION STAR! 🎉</h2>
+                <p>You completed the runway and mastered all the fashion sentences!</p>
+                <div class="certificate-badge">
+                    <h3>🏆 FASHION STAR CERTIFICATE 🏆</h3>
+                    <p>This certifies that</p>
+                    <div class="cert-name">SUPER STAR PUPIL</div>
+                    <p>Successfully completed the Fabulous Fashion Runway with <span id="final-stars">15</span> ⭐ Stars!</p>
+                </div>
+                <button id="play-again-btn" class="primary-btn">PLAY AGAIN 💖</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti / Particle Container -->
+    <div id="confetti-container"></div>
+
+    <script>
+        // Game Curriculum - 3 Levels of Sentences for Year 1 Pupils
+        const gameLevels = [
+            {
+                level: 1,
+                name: "Easy Sentences",
+                sentences: [
+                    { text: "My pink dress is pretty.", outfit: "👗 Pink Dress" },
+                    { text: "I like my red hat.", outfit: "👒 Red Hat" },
+                    { text: "My shoes are blue.", outfit: "👟 Blue Shoes" },
+                    { text: "She has a cute bag.", outfit: "👜 Cute Bag" },
+                    { text: "The skirt is pink.", outfit: "👚 Pink Skirt" }
+                ]
+            },
+            {
+                level: 2,
+                name: "Simple Descriptions",
+                sentences: [
+                    { text: "My dress is very beautiful.", outfit: "✨ Fancy Dress" },
+                    { text: "I have a yellow bag.", outfit: "👜 Yellow Bag" },
+                    { text: "Her shoes are very nice.", outfit: "🥿 Nice Shoes" },
+                    { text: "My hat is big and red.", outfit: "👒 Big Red Hat" },
+                    { text: "I like this blue skirt.", outfit: "👗 Blue Skirt" }
+                ]
+            },
+            {
+                level: 3,
+                name: "Fashion Sentences",
+                sentences: [
+                    { text: "I am wearing a pink dress.", outfit: "👗 Runway Dress" },
+                    { text: "My shoes are shiny and new.", outfit: "✨ Shiny Shoes" },
+                    { text: "She is wearing a red hat.", outfit: "👒 Chic Hat" },
+                    { text: "I love my pretty purple dress.", outfit: "💜 Purple Dress" },
+                    { text: "My bag is small and cute.", outfit: "👜 Mini Bag" }
+                ]
+            }
+        ];
+
+        // Flat list of all sentences for easy indexing
+        let allSentences = [];
+        gameLevels.forEach(lvl => {
+            lvl.sentences.forEach(s => {
+                allSentences.push({ ...s, level: lvl.level });
+            });
+        });
+
+        // Game State
+        let currentIndex = 0;
+        let starsEarned = 0;
+        let isListening = false;
+        let recognition = null;
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const celebrationScreen = document.getElementById('celebration-screen');
+
+        const startBtn = document.getElementById('start-btn');
+        const micBtn = document.getElementById('mic-btn');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const manualPassBtn = document.getElementById('manual-pass-btn');
+
+        const sentenceBox = document.getElementById('sentence-box');
+        const speechStatus = document.getElementById('speech-status');
+        const starCountEl = document.getElementById('star-count');
+        const totalSentencesCountEl = document.getElementById('total-sentences-count');
+        const currentLevelBadge = document.getElementById('current-level-badge');
+        const levelNumEl = document.getElementById('level-num');
+        const sentenceIndexEl = document.getElementById('sentence-index');
+
+        const modelContainer = document.getElementById('model-container');
+        const outfitBadge = document.getElementById('outfit-badge');
+        const feedbackBanner = document.getElementById('feedback-banner');
+        const feedbackText = document.getElementById('feedback-text');
+        const finalStarsEl = document.getElementById('final-stars');
+
+        // Initialize Speech Recognition
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                speechStatus.textContent = "🎙️ Speech API not supported in this browser. Use 'Skip / Read Correctly' below.";
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-GB'; // Friendly English variant
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isListening = true;
+                micBtn.classList.add('listening');
+                micBtn.innerHTML = '<span class="mic-icon">🔴</span> Listening...';
+                speechStatus.textContent = "Listening to your voice...";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                speechStatus.textContent = `You said: "${transcript}"`;
+                evaluateSpeech(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                console.warn('Speech recognition error:', event.error);
+                stopListeningState();
+                speechStatus.textContent = "Didn't quite catch that. Tap microphone to try again!";
+            };
+
+            recognition.onend = () => {
+                stopListeningState();
+            };
+        }
+
+        function stopListeningState() {
+            isListening = false;
+            micBtn.classList.remove('listening');
+            micBtn.innerHTML = '<span class="mic-icon">🎤</span> Tap & Speak';
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        micBtn.addEventListener('click', toggleListening);
+        playAgainBtn.addEventListener('click', resetGame);
+        manualPassBtn.addEventListener('click', () => {
+            // Manual fallback for accessibility or missing mic
+            evaluateSpeech(allSentences[currentIndex].text);
+        });
+
+        function startGame() {
+            startScreen.classList.remove('active');
+            gameScreen.classList.add('active');
+            currentIndex = 0;
+            starsEarned = 0;
+            totalSentencesCountEl.textContent = allSentences.length;
+            updateGameUI();
+            initSpeechRecognition();
+        }
+
+        function toggleListening() {
+            if (!recognition) {
+                // Fallback if speech recognition is completely unavailable
+                evaluateSpeech(allSentences[currentIndex].text);
+                return;
+            }
+
+            if (isListening) {
+                recognition.stop();
+            } else {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    recognition.abort();
+                    recognition.start();
+                }
+            }
+        }
+
+        // Clean text for comparison (ignore punctuation & casing)
+        function normalizeText(text) {
+            return text
+                .toLowerCase()
+                .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        function evaluateSpeech(spokenText) {
+            const targetSentence = allSentences[currentIndex].text;
+            const cleanSpoken = normalizeText(spokenText);
+            const cleanTarget = normalizeText(targetSentence);
+
+            // Flexible checking: allow if most words match or exact match
+            const isCorrect = cleanSpoken === cleanTarget || calculateWordMatch(cleanSpoken, cleanTarget) >= 0.7;
+
+            if (isCorrect) {
+                handleCorrectReading();
+            } else {
+                handleIncorrectReading();
+            }
+        }
+
+        function calculateWordMatch(spoken, target) {
+            const spokenWords = spoken.split(' ');
+            const targetWords = target.split(' ');
+            let matches = 0;
+            spokenWords.forEach(word => {
+                if (targetWords.includes(word)) matches++;
+            });
+            return matches / targetWords.length;
+        }
+
+        function handleCorrectReading() {
+            starsEarned++;
+            starCountEl.textContent = starsEarned;
+            
+            // UI Animations
+            showFeedback("GREAT JOB! YOU DID IT! ⭐", false);
+            modelContainer.className = "model-container walk";
+            
+            // Trigger confetti
+            createConfetti();
+
+            setTimeout(() => {
+                modelContainer.className = "model-container pose";
+            }, 800);
+
+            // Advance to next sentence after animation delay
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < allSentences.length) {
+                    updateGameUI();
+                    feedbackBanner.classList.add('hidden');
+                    modelContainer.className = "model-container idle";
+                } else {
+                    showCelebration();
+                }
+            }, 2200);
+        }
+
+        function handleIncorrectReading() {
+            showFeedback("OOPS! LET'S TRY AGAIN! 🔄", true);
+            modelContainer.className = "model-container stumble";
+
+            setTimeout(() => {
+                modelContainer.className = "model-container idle";
+            }, 1200);
+        }
+
+        function showFeedback(text, isError) {
+            feedbackText.textContent = text;
+            feedbackBanner.className = isError ? "feedback-banner error" : "feedback-banner";
+        }
+
+        function updateGameUI() {
+            const currentItem = allSentences[currentIndex];
+            sentenceBox.textContent = `"${currentItem.text}"`;
+            outfitBadge.textContent = currentItem.outfit;
+            
+            currentLevelBadge.textContent = currentItem.level;
+            levelNumEl.textContent = currentItem.level;
+            
+            // Calculate sentence index within current level (1 to 5)
+            const levelSentenceIndex = (currentIndex % 5) + 1;
+            sentenceIndexEl.textContent = levelSentenceIndex;
+            
+            speechStatus.textContent = "Tap microphone & read out loud!";
+        }
+
+        function showCelebration() {
+            gameScreen.classList.remove('active');
+            celebrationScreen.classList.add('active');
+            finalStarsEl.textContent = starsEarned;
+            createMassiveConfetti();
+        }
+
+        function resetGame() {
+            celebrationScreen.classList.remove('active');
+            startScreen.classList.add('active');
+            currentIndex = 0;
+            starsEarned = 0;
+            starCountEl.textContent = '0';
+        }
+
+        // Confetti Effect Generator
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#ff66b2', '#f1c40f', '#9b59b6', '#00b09b', '#ff4b2b'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 1 + 1.5) + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+                container.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, 2500);
+            }
+        }
+
+        function createMassiveConfetti() {
+            for (let i = 0; i < 4; i++) {
+                setTimeout(createConfetti, i * 400);
+            }
+        }
+    </script>
+</body>
+</html>
